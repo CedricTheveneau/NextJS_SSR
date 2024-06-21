@@ -6,7 +6,7 @@ export const metadata = {
     "See everyone's TODOs and select one to see the details of a specific one",
 };
 
-export default async function Tasks({ tasks }) {
+export default function Tasks({ tasks }) {
   return (
     <ul>
       {tasks.map((task) => (
