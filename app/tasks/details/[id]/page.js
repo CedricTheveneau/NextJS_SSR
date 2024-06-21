@@ -1,23 +1,17 @@
 import Link from "next/link";
+import getTaskById from "../../utils/getTaskById";
 
-export const metadata = {
-  title: "My awesome todo task",
-  description:
-    "See details of a specific TODO. You're also able to see all TODOs from a specific user",
-};
-
-async function getTask(id) {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
-    cache: "no-store",
-  });
-  const task = await res.json();
-
-  return task;
+export async function generateMetadata({ params }) {
+  const task = await getTaskById(params.id);
+  return {
+    title: task.title,
+    description: `${task.title} - ${task.id} | ${task.userId}`,
+  };
 }
 
 export default async function Task({ params }) {
   const { id } = params;
-  const task = await getTask(id);
+  const task = await getTaskById(id);
 
   return (
     <div>
@@ -25,9 +19,12 @@ export default async function Task({ params }) {
       <p>ID : {task.id}</p>
       <p>Status : {task.completed ? "✔️" : "❌"}</p>
       <br />
+      <br />
       <Link href={`/tasks/user/${task.userId}`}>
         See all this user&apos;s tasks →
       </Link>
+      <br />
+      <br />
       <Link href={`/`}>See all tasks →</Link>
     </div>
   );
